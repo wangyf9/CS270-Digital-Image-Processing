@@ -1,0 +1,25 @@
+%pwd
+ori_img = imread('..\figure\blurred.tif');
+L = 40;
+theta = 124;
+h = fspecial('motion', L, theta);
+H = psf2otf(h, size(ori_img));
+K1 = 0.001; 
+K2 = 0.01;
+K3 = 0.1;
+wienerFilter = conj(H) ./ (abs(H).^2 + K1);
+filteredImg = ifft2(fft2(ori_img) .* wienerFilter);
+figure;
+subplot(1,3,1);
+imshow(filteredImg, []);
+title(['Wiener Filtered restored Image with K = ',num2str(K1)]);
+wienerFilter = conj(H) ./ (abs(H).^2 + K2);
+filteredImg = ifft2(fft2(ori_img) .* wienerFilter);
+subplot(1,3,2);
+imshow(filteredImg, []);
+title(['Wiener Filtered restored Image with K = ',num2str(K2)]);
+wienerFilter = conj(H) ./ (abs(H).^2 + K3);
+filteredImg = ifft2(fft2(ori_img) .* wienerFilter);
+subplot(1,3,3);
+imshow(filteredImg, []);
+title(['Wiener Filtered restored Image with K = ',num2str(K3)]);
